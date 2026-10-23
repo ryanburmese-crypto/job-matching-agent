@@ -1,4 +1,5 @@
-google-genai
 playwright
+google-genai
 pypdf
 requests
+python-dotenv
