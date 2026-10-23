@@ -3,7 +3,7 @@ name: Daily Job Matching Agent
 # 📌 ဤနေရာတွင် Event Trigger ကို သေချာ သတ်မှတ်ပေးရန် လိုအပ်သည်
 on:
   schedule:
-    - cron: '0 23 * * *' # နေ့စဉ် ည ၁၁နာရီ (UTC) တွင် အလိုအလျောက် Run မည်
+    - cron: '15 2 * * *' # နေ့စဉ် ည ၁၁နာရီ (UTC) တွင် အလိုအလျောက် Run မည်
   workflow_dispatch:      # GitHub UI မှ Manual ဖြင့် လက်ဖြင့် နှိပ်၍ Run နိုင်ရန်
 
 jobs:
