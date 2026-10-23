@@ -6,9 +6,13 @@ from pypdf import PdfReader
 from playwright.async_api import async_playwright
 from google import genai
 from google.genai import types
+from dotenv import load_dotenv
 
-# Load variables from .env file
-load_dotenv()
+# GitHub Actions ပေါ်တွင် .env ဖိုင် မရှိနိုင်သောကြောင့် safe ဖြစ်စေရန် try-except ဖြင့် load လုပ်ခြင်း
+try:
+    load_dotenv(override=True)
+except ImportError:
+    pass
 
 # Load Environment Variables
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -41,9 +45,8 @@ async def fetch_seek_jobs(keyword, location):
         url = f"https://www.seek.com.au/{keyword}-jobs/in-{location}"
         
         print(f"Navigating to {url}...")
-        await page.goto(url, timeout=60000)
-        
         try:
+            await page.goto(url, timeout=60000)
             await page.wait_for_selector('article[data-card-type="JobCard"]', timeout=15000)
             cards = await page.query_selector_all('article[data-card-type="JobCard"]')
             
@@ -52,7 +55,7 @@ async def fetch_seek_jobs(keyword, location):
                 if title_elem:
                     title = await title_elem.inner_text()
                     href = await title_elem.get_attribute('href')
-                    full_link = f"https://www.seek.com.au{href}" if href.startswith('/') else href
+                    full_link = f"https://www.seek.com.au{href}" if href and href.startswith('/') else href
                     jobs.append({"title": title, "link": full_link})
         except Exception as e:
             print(f"Error while scraping Seek: {e}")
